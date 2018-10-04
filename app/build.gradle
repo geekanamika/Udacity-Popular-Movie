@@ -41,4 +41,6 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
     // picasso
     implementation "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
+    // ken burns effect
+    compile 'com.flaviofaria:kenburnsview:1.0.7'
 }

@@ -23,6 +23,7 @@ public class GridMovieAdapter extends RecyclerView.Adapter<GridMovieAdapter.MyVi
     private final Context context;
     private final ItemClickListener listener;
     private List<Movie> movieList;
+    private String baseURL = "http://image.tmdb.org/t/p/w185/";
 
     public GridMovieAdapter(Context context, ItemClickListener listener) {
         this.context = context;
@@ -46,7 +47,7 @@ public class GridMovieAdapter extends RecyclerView.Adapter<GridMovieAdapter.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.movieTitle.setText(movieList.get(position).getTitle());
         Picasso.with(context)
-                .load(movieList.get(position).getPosterPath())
+                .load(baseURL+ movieList.get(position).getPosterPath())
                 .placeholder(R.drawable.placeholder)
                 .into(holder.moviePoster);
         holder.movieReleaseYear.setText(movieList.get(position).getReleaseDate());

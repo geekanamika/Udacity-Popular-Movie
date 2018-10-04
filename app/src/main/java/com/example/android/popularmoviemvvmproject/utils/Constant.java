@@ -6,9 +6,9 @@ import java.util.HashMap;
  * Created by Anamika Tripathi on 5/10/18.
  */
 public class Constant {
-    public HashMap<Integer, String> genreList = new HashMap<>();
+    private HashMap<Integer, String> genreList = new HashMap<>();
 
-    private void createGenreList() {
+    public void createGenreList() {
         genreList.put(28, "Action");
         genreList.put(12, "Adventure");
         genreList.put(16, "Animation");

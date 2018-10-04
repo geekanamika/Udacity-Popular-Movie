@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import java.util.Locale;
 public class DetailActivity extends AppCompatActivity {
     private TextView genres, releaseDate, voteAverage, overView;
     private ImageView backDropImage, moviePosterBackGround;
+    private Constant constant;
+    private String baseURL = "http://image.tmdb.org/t/p/w185/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         // init views
-        backDropImage = findViewById(R.id.header);
+        //backDropImage = findViewById(R.id.header);
         genres = findViewById(R.id.genres);
         releaseDate = findViewById(R.id.release_date);
         voteAverage = findViewById(R.id.average_vote);
@@ -54,15 +57,20 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initView(Movie model) {
         toolbarSetUp(model.getTitle());
+
+        // init constants for genres
+        constant = new Constant();
+        constant.createGenreList();
+
+//        Picasso.with(this)
+//                .load(model.getBackdropPath())
+//                .placeholder(R.drawable.placeholder)
+//                .into(backDropImage);
         Picasso.with(this)
-                .load(model.getBackdropPath())
-                .placeholder(R.drawable.placeholder)
-                .into(backDropImage);
-        Picasso.with(this)
-                .load(model.getPosterPath())
+                .load(baseURL+model.getPosterPath())
                 .placeholder(R.drawable.placeholder)
                 .into(moviePosterBackGround);
-        //Todo genre setup
+        Log.d("myTag", model.getPosterPath());
         genres.setText(getGenreString(model));
 
         releaseDate.setText(getString(R.string.release_date_label, model.getReleaseDate()));
@@ -72,7 +80,6 @@ public class DetailActivity extends AppCompatActivity {
 
     private String getGenreString(Movie model) {
         StringBuilder s2 = new StringBuilder("");
-        Constant constant = new Constant();
         if (model.getGenreIds().size() > 0) {
             for (int j = 0; j < model.getGenreIds().size(); j++) {
                 int key = model.getGenreIds().get(j);
@@ -83,12 +90,12 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void toolbarSetUp(String text) {
-        Toolbar toolbar = findViewById(R.id.anim_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            setTitle(text);
-        }
+//        Toolbar toolbar = findViewById(R.id.anim_toolbar);
+//        setSupportActionBar(toolbar);
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            setTitle(text);
+//        }
     }
 
 
