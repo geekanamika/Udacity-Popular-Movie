@@ -10,7 +10,7 @@ import com.example.android.popularmoviemvvmproject.data.models.Favourites;
 /**
  * Created by Anamika Tripathi on 4/10/18.
  */
-@Database(entities = {Favourites.class}, version = 1)
+@Database(entities = {Favourites.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FavDao favDao();

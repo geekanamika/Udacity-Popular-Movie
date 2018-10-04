@@ -169,14 +169,15 @@ public class Movie implements Parcelable {
         parcel.writeInt(voteCount);
         parcel.writeInt(id);
         parcel.writeDouble(voteAverage);
+        parcel.writeString(title);
         parcel.writeDouble(popularity);
         parcel.writeString(posterPath);
         parcel.writeString(originalLanguage);
         parcel.writeString(originalTitle);
-        parcel.writeString(overview);
-        parcel.writeString(releaseDate);
-        parcel.writeString(backdropPath);
         parcel.writeList(genreIds);
+        parcel.writeString(backdropPath);
+        parcel.writeString(releaseDate);
+        parcel.writeString(overview);
     }
 
     public static Parcelable.Creator<Movie> CREATOR

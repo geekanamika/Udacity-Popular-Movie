@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.android.popularmoviemvvmproject.BuildConfig;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
 import com.example.android.popularmoviemvvmproject.utils.AppExecutors;
@@ -73,15 +74,14 @@ public class MovieNetworkSource {
 
     public void loadMovies(String filterType) {
 
-        Call<MovieResponse> movieResponse = webService.loadMovies(filterType,
-                "a43f8ddec4a3456a6ad1029d2c9cac76");
-
+        Call<MovieResponse> movieResponse = webService.loadMovies(filterType, BuildConfig.MovieApiKey);
         movieResponse.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 if (response.isSuccessful()) {
                     // posting value to the live data
                     mDownloadedMovieDetails.postValue(response.body().getMovies());
+                    Log.d("myTag","network source: on sucess called");
                 }
             }
 
@@ -96,7 +96,7 @@ public class MovieNetworkSource {
     public void loadReviews(int id) {
 
         Call<ReviewResponse> movieResponse = webService.loadReviews("" + id,
-                "a43f8ddec4a3456a6ad1029d2c9cac76");
+                BuildConfig.MovieApiKey);
 
         movieResponse.enqueue(new Callback<ReviewResponse>() {
             @Override

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.data.MovieRepository;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
+import com.example.android.popularmoviemvvmproject.data.remote.MovieResponse;
 import com.example.android.popularmoviemvvmproject.utils.InjectorUtil;
 
 import java.util.List;
@@ -20,25 +21,19 @@ import java.util.List;
  */
 public class MainActivityViewModel extends AndroidViewModel {
     private MovieRepository repository;
+    private LiveData<List<Movie>> movieLiveData;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
-        repository.getDownloadedMovieData().observeForever(new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(@Nullable List<Movie> movies) {
-                Log.d("myTag", "update recyclerView");
-                if ((movies != null ? movies.size() : 0) > 0) {
-                    for (Movie m :
-                            movies) {
-                        Log.d("myTag", m.getTitle());
-                    }
-                }
-            }
-        });
+        movieLiveData = repository.getDownloadedMovieData();
     }
 
     public void startFetchingData(String filterType) {
         repository.startFetchingData(filterType);
+    }
+
+    public LiveData<List<Movie>> getMovieResults() {
+        return movieLiveData;
     }
 }

@@ -25,7 +25,6 @@ public class MovieRepository {
     private final FavDao favDao;
     private final MovieNetworkSource movieNetworkSource;
     private final AppExecutors mExecutors;
-    private boolean mInitialized = false;
 
     private MovieRepository(FavDao dao,
                             MovieNetworkSource networkSource,
@@ -82,6 +81,7 @@ public class MovieRepository {
 
     /**
      * checks if movie is already fav or not, uses callback
+     *
      * @param id
      */
     public LiveData<Integer> checkIfMovieIsFavourite(final int id) {
