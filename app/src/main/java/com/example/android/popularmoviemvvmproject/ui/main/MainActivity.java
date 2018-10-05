@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private MainActivityViewModel viewModel;
     private GridMovieAdapter adapter;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // initializing variables
         init();
 
+        // starting fetching data with popular filter
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         viewModel.startFetchingData("popular");
         viewModel.getMovieResults().observeForever(new Observer<List<Movie>>() {
@@ -46,6 +50,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onChanged(@Nullable List<Movie> movies) {
                 adapter.setList(movies);
                 Log.d("myTag", "mainactivity:onchanged called");
+            }
+        });
+        viewModel.getLoadingStatus().observeForever(new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoading) {
+                if (isLoading != null) {
+                    // if true then show progress bar else hide it
+                    if (isLoading) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        Log.d("myTag", "mainactivity:show progress bar");
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        Log.d("myTag", "mainactivity:hide progress bar");
+                    }
+                }
             }
         });
     }
@@ -69,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 GridLayoutManager.VERTICAL, false);
         movieGridView.setLayoutManager(manager);
         movieGridView.addItemDecoration(new SpacesItemDecoration(4));
+        // progress init
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void startDetailActivity(int position) {

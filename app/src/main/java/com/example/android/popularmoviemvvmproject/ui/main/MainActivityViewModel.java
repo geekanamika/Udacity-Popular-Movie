@@ -36,4 +36,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     public LiveData<List<Movie>> getMovieResults() {
         return movieLiveData;
     }
+
+    public LiveData<Boolean> getLoadingStatus () {
+        return repository.isLoadingData();
+    }
 }
