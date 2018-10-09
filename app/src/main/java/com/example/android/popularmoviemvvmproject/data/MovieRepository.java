@@ -113,4 +113,10 @@ public class MovieRepository {
     public void startFetchingReviews(int movieId) {
         movieNetworkSource.loadReviews(movieId);
     }
+
+
+    public LiveData<Boolean> isLoadingData() {
+        return movieNetworkSource.getIsLoading();
+    }
+
 }

@@ -27,8 +27,11 @@ public class MovieNetworkSource {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private WebService webService;
+    // mutable list which contains values from network source
     private final MutableLiveData<List<Movie>> mDownloadedMovieDetails;
     private final MutableLiveData<List<Review>> mReviewList;
+    // checks about loading status & helps in loading indicator
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     // For Singleton instantiation
     private static final Object LOCK = new Object();
     private static MovieNetworkSource sInstance;
@@ -70,10 +73,8 @@ public class MovieNetworkSource {
         return mReviewList;
     }
 
-
-
     public void loadMovies(String filterType) {
-
+        isLoading.postValue(true);
         Call<MovieResponse> movieResponse = webService.loadMovies(filterType, BuildConfig.MovieApiKey);
         movieResponse.enqueue(new Callback<MovieResponse>() {
             @Override
@@ -81,6 +82,7 @@ public class MovieNetworkSource {
                 if (response.isSuccessful()) {
                     // posting value to the live data
                     mDownloadedMovieDetails.postValue(response.body().getMovies());
+                    isLoading.postValue(false);
                     Log.d("myTag","network source: on sucess called");
                 }
             }
@@ -91,6 +93,10 @@ public class MovieNetworkSource {
             }
         });
 
+    }
+
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     public void loadReviews(int id) {

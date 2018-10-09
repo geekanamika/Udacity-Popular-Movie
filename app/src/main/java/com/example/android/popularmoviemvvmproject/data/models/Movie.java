@@ -176,8 +176,8 @@ public class Movie implements Parcelable {
         parcel.writeString(originalTitle);
         parcel.writeList(genreIds);
         parcel.writeString(backdropPath);
-        parcel.writeString(releaseDate);
         parcel.writeString(overview);
+        parcel.writeString(releaseDate);
     }
 
     public static Parcelable.Creator<Movie> CREATOR

@@ -6,7 +6,7 @@
     <string name="desc_movie_poster">Movie poster</string>
     <string name="release_date_label">Release:    %s</string>
     <string name="vote_label">Vote:</string>
-    <string name="genre_label">Genre: </string>
+    <string name="genre_label">Genre: %s</string>
     <string name="extra_key">details</string>
     <string name="detail_error_message">Something Went Wrong</string>
     <string name="key_release_date">release_date</string>
@@ -17,6 +17,9 @@
     <string name="year_pattern">yyyy</string>
     <string name="fallback">N/A</string>
     <string name="key_title">title</string>
+    <string name="info">Info</string>
+    <string name="favourite">Favourite</string>
+    <string name="share">share</string>
 
     <string-array name="spinner_list">
         <item>Popular</item>
