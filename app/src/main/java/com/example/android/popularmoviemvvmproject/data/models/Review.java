@@ -14,12 +14,6 @@ public class Review {
     @SerializedName("content")
     @Expose
     private String content;
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("url")
-    @Expose
-    private String url;
 
     public String getAuthor() {
         return author;
@@ -35,21 +29,5 @@ public class Review {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 }

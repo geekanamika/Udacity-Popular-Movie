@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.android.popularmoviemvvmproject.BuildConfig;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
+import com.example.android.popularmoviemvvmproject.data.models.Trailer;
 import com.example.android.popularmoviemvvmproject.utils.AppExecutors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,13 +31,14 @@ public class MovieNetworkSource {
     // mutable list which contains values from network source
     private final MutableLiveData<List<Movie>> mDownloadedMovieDetails;
     private final MutableLiveData<List<Review>> mReviewList;
+    private final MutableLiveData<List<Trailer>> mTrailerList;
     // checks about loading status & helps in loading indicator
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     // For Singleton instantiation
     private static final Object LOCK = new Object();
     private static MovieNetworkSource sInstance;
 
-    public MovieNetworkSource() {
+    private MovieNetworkSource() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -48,6 +50,7 @@ public class MovieNetworkSource {
         webService = retrofit.create(WebService.class);
         mDownloadedMovieDetails = new MutableLiveData<>();
         mReviewList = new MutableLiveData<>();
+        mTrailerList = new MutableLiveData<>();
     }
 
     /**
@@ -73,6 +76,14 @@ public class MovieNetworkSource {
         return mReviewList;
     }
 
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public MutableLiveData<List<Trailer>> getmTrailerList() {
+        return mTrailerList;
+    }
+
     public void loadMovies(String filterType) {
         isLoading.postValue(true);
         Call<MovieResponse> movieResponse = webService.loadMovies(filterType, BuildConfig.MovieApiKey);
@@ -95,10 +106,6 @@ public class MovieNetworkSource {
 
     }
 
-    public LiveData<Boolean> getIsLoading() {
-        return isLoading;
-    }
-
     public void loadReviews(int id) {
 
         Call<ReviewResponse> movieResponse = webService.loadReviews("" + id,
@@ -107,13 +114,16 @@ public class MovieNetworkSource {
         movieResponse.enqueue(new Callback<ReviewResponse>() {
             @Override
             public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
-                if (response.isSuccessful())
+                if (response.isSuccessful()) {
                     mReviewList.postValue(response.body().getResults());
+                    Log.d("myTag", response.body().getResults().get(0).getAuthor());
+                }
+
             }
 
             @Override
             public void onFailure(Call<ReviewResponse> call, Throwable t) {
-
+                Log.e("myTag", t.getMessage());
             }
         });
     }
@@ -122,18 +132,18 @@ public class MovieNetworkSource {
     public void loadTrailer(int id) {
 
         Call<TrailerResponse> trailerResponse = webService.loadTrailers("" + id,
-                "a43f8ddec4a3456a6ad1029d2c9cac76");
+                BuildConfig.MovieApiKey);
 
         trailerResponse.enqueue(new Callback<TrailerResponse>() {
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 if (response.isSuccessful())
-                    Log.d("myTag", response.body().getResults().get(0).getName());
+                    mTrailerList.postValue(response.body().getResults());
             }
 
             @Override
             public void onFailure(Call<TrailerResponse> call, Throwable t) {
-                Log.d("myTag", t.getMessage());
+                Log.e("myTag", t.getMessage());
             }
         });
 

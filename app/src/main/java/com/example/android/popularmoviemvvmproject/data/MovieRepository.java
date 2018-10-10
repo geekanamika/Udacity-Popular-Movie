@@ -7,6 +7,7 @@ import com.example.android.popularmoviemvvmproject.data.local.FavDao;
 import com.example.android.popularmoviemvvmproject.data.models.Favourites;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
+import com.example.android.popularmoviemvvmproject.data.models.Trailer;
 import com.example.android.popularmoviemvvmproject.data.remote.MovieNetworkSource;
 import com.example.android.popularmoviemvvmproject.utils.AppExecutors;
 
@@ -102,8 +103,13 @@ public class MovieRepository {
         return movieNetworkSource.getDownloadedMovies();
     }
 
+
     public LiveData<List<Review>> getReviewsOfMovie() {
         return movieNetworkSource.getReviewList();
+    }
+
+    public LiveData<List<Trailer>> getTrailerOfMovie() {
+        return movieNetworkSource.getmTrailerList();
     }
 
     public void startFetchingData(String filterType) {
@@ -114,6 +120,9 @@ public class MovieRepository {
         movieNetworkSource.loadReviews(movieId);
     }
 
+    public void startFetchingTrailers(int movieId) {
+        movieNetworkSource.loadTrailer(movieId);
+    }
 
     public LiveData<Boolean> isLoadingData() {
         return movieNetworkSource.getIsLoading();

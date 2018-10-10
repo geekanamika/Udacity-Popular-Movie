@@ -14,11 +14,11 @@ public interface WebService {
     Call<MovieResponse> loadMovies(@Path("filter_type") String filterBy,
                                    @Query("api_key") String api_key);
 
-    @GET("/3/movie/{id}/videos")
+    @GET("movie/{id}/videos")
     Call<TrailerResponse> loadTrailers(@Path("id") String id,
                                        @Query("api_key") String api_key);
 
-    @GET("/3/movie/{id}/reviews")
+    @GET("movie/{id}/reviews")
     Call<ReviewResponse> loadReviews(@Path("id") String id,
                                      @Query("api_key") String api_key);
 }

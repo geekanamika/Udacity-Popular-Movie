@@ -20,6 +20,7 @@
     <string name="info">Info</string>
     <string name="favourite">Favourite</string>
     <string name="share">share</string>
+    <string name="sample_text">lorem ipsum</string>
 
     <string-array name="spinner_list">
         <item>Popular</item>
