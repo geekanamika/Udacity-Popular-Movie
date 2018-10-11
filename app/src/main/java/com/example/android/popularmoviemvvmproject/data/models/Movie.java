@@ -1,6 +1,9 @@
 
 package com.example.android.popularmoviemvvmproject.data.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,6 +12,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "movieFavourites")
 public class Movie implements Parcelable {
 
     @SerializedName("vote_count")
@@ -16,6 +20,7 @@ public class Movie implements Parcelable {
     private int voteCount;
     @SerializedName("id")
     @Expose
+    @PrimaryKey
     private int id;
     @SerializedName("vote_average")
     @Expose
@@ -31,6 +36,7 @@ public class Movie implements Parcelable {
     private String posterPath;
     @SerializedName("genre_ids")
     @Expose
+    @Ignore
     private List<Integer> genreIds = null;
     @SerializedName("backdrop_path")
     @Expose
@@ -42,6 +48,21 @@ public class Movie implements Parcelable {
     @Expose
     private String releaseDate;
 
+    public Movie(Integer voteCount, Integer id, Double voteAverage, String title, Double popularity,
+                 String posterPath,
+                      String backdropPath, String overview, String releaseDate) {
+        this.voteCount = voteCount;
+        this.id = id;
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.popularity = popularity;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+    }
+
+    @Ignore
     public Movie(Parcel in) {
         this.voteCount = in.readInt();
         this.id = in.readInt();

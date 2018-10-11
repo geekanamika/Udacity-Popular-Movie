@@ -45,7 +45,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
     @Override
     public void onBindViewHolder(@NonNull ReviewHolder holder, int position) {
         holder.reviewAuthor.setText(reviewList.get(position).getAuthor());
-        Log.d("myTag", ""+ reviewList.get(position).getAuthor().charAt(0));
         holder.reviewImage.setText(""+reviewList.get(position).getAuthor().charAt(0));
         holder.reviewContent.setText(reviewList.get(position).getContent());
     }

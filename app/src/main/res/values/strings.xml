@@ -25,5 +25,6 @@
     <string-array name="spinner_list">
         <item>Popular</item>
         <item>Top-rated</item>
+        <item>Favourites</item>
     </string-array>
 </resources>

@@ -1,14 +1,11 @@
 package com.example.android.popularmoviemvvmproject.ui.detail;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.data.MovieRepository;
-import com.example.android.popularmoviemvvmproject.data.models.Favourites;
+import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.utils.InjectorUtil;
 
 /**
@@ -26,7 +23,7 @@ public class DetailViewModel extends ViewModel {
         return favouriteStatus;
     }
 
-    void setFavouriteMovie(Favourites favourite) {
+    void setFavouriteMovie(Movie favourite) {
         movieRepository.insertFavouriteMovie(favourite);
     }
 

@@ -5,12 +5,12 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.example.android.popularmoviemvvmproject.data.models.Favourites;
+import com.example.android.popularmoviemvvmproject.data.models.Movie;
 
 /**
  * Created by Anamika Tripathi on 4/10/18.
  */
-@Database(entities = {Favourites.class}, version = 1, exportSchema = false)
+@Database(entities = {Movie.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FavDao favDao();

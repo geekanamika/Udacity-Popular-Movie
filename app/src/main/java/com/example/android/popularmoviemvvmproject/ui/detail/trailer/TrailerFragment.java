@@ -2,6 +2,8 @@ package com.example.android.popularmoviemvvmproject.ui.detail.trailer;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -62,9 +64,17 @@ public class TrailerFragment extends Fragment {
 
     private void init(View view) {
         RecyclerView trailerRecyclerView = view.findViewById(R.id.rv_trailers);
-        trailerAdapter = new TrailerAdapter(getContext());
+        trailerAdapter = new TrailerAdapter(getContext(), new TrailerAdapter.TrailerClickListener() {
+            @Override
+            public void onTrailerClick(String url) {
+                Log.d("myTag", "youtuvbe url "+ url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.google.android.youtube");
+                startActivity(intent);
+            }
+        });
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         trailerRecyclerView.setAdapter(trailerAdapter);
-        //trailerRecyclerView.addItemDecoration(new DividerItemDecoration());
     }
 }

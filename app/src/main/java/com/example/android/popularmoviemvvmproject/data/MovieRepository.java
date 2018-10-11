@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.data.local.FavDao;
-import com.example.android.popularmoviemvvmproject.data.models.Favourites;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
 import com.example.android.popularmoviemvvmproject.data.models.Trailer;
@@ -54,7 +53,7 @@ public class MovieRepository {
      *
      * @param fav: fav movie object
      */
-    public void insertFavouriteMovie(final Favourites fav) {
+    public void insertFavouriteMovie(final Movie fav) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -92,7 +91,8 @@ public class MovieRepository {
     /**
      * @return list of all favourites movies saved and it's details
      */
-    public LiveData<List<Favourites>> getFavouriteMovieData() {
+    public LiveData<List<Movie>> getFavouriteMovieData() {
+        //Log.d("myTag", ""+ favDao.getFavouritesMovieListSize().getValue());
         return favDao.getFavouritesMovieList();
     }
 

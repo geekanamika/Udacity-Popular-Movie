@@ -1,6 +1,8 @@
 package com.example.android.popularmoviemvvmproject.ui.detail.trailer;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,10 +26,13 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerH
 
     private Context context;
     private List<Trailer> trailerList;
+    private final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
+    private final TrailerClickListener listener;
 
-    TrailerAdapter(Context context) {
+    TrailerAdapter(Context context, TrailerClickListener listener) {
         this.context = context;
         trailerList = new ArrayList<>();
+        this.listener = listener;
     }
 
     public void setList(List<Trailer> reviews){
@@ -58,11 +63,22 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerH
         else return 0;
     }
 
-    class TrailerHolder extends RecyclerView.ViewHolder {
+    class TrailerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView trailerImage;
-        public TrailerHolder(@NonNull View itemView) {
+        TrailerHolder(@NonNull View itemView) {
             super(itemView);
             trailerImage = itemView.findViewById(R.id.img_trailer);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            int id = getAdapterPosition();
+            listener.onTrailerClick(YOUTUBE_BASE_URL + trailerList.get(id).getKey());
+        }
+    }
+
+    interface TrailerClickListener {
+        void onTrailerClick(String url);
     }
 }

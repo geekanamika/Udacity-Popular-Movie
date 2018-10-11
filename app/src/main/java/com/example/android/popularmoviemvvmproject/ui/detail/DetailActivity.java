@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.popularmoviemvvmproject.R;
-import com.example.android.popularmoviemvvmproject.data.models.Favourites;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.ui.detail.review.ReviewFragment;
 import com.example.android.popularmoviemvvmproject.ui.detail.trailer.TrailerFragment;
@@ -103,12 +102,11 @@ public class DetailActivity extends AppCompatActivity {
 
         DetailModelFactory factory = new DetailModelFactory(this.getApplication(), movieModel.getId());
         detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
-
+        String baseURL = "http://image.tmdb.org/t/p/w185/";
         Picasso.with(this)
-                .load(movieModel.getBackdropPath())
+                .load(baseURL + movieModel.getBackdropPath())
                 .placeholder(R.drawable.placeholder)
                 .into(backDropImage);
-        String baseURL = "http://image.tmdb.org/t/p/w185/";
         Picasso.with(this)
                 .load(baseURL + movieModel.getPosterPath())
                 .placeholder(R.drawable.placeholder)
@@ -151,8 +149,8 @@ public class DetailActivity extends AppCompatActivity {
         trailerFragment.setArguments(bundle);
         reviewFragment.setArguments(bundle);
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TrailerFragment(), "Trailers");
-        adapter.addFragment(new ReviewFragment(), "Reviews");
+        adapter.addFragment(trailerFragment, "Trailers");
+        adapter.addFragment(reviewFragment, "Reviews");
         viewPager.setAdapter(adapter);
     }
 
@@ -165,13 +163,7 @@ public class DetailActivity extends AppCompatActivity {
     @OnClick(R.id.fav_button)
     void favouriteIconClick() {
         if (!isFavourite) {
-            Favourites fav = new Favourites(movieModel.getVoteCount(), movieModel.getId(),
-                    movieModel.getVoteAverage(), movieModel.getTitle(), movieModel.getPopularity(),
-                    movieModel.getPosterPath(), movieModel.getBackdropPath(), movieModel.getOverview(),
-                    movieModel.getReleaseDate()
-
-            );
-            detailViewModel.setFavouriteMovie(fav);
+            detailViewModel.setFavouriteMovie(movieModel);
             Log.d("myTag", "set movie as Favourite "+ movieModel.getId());
         } else {
             detailViewModel.removeFavouriteMovie(movieModel.getId());
@@ -188,7 +180,7 @@ public class DetailActivity extends AppCompatActivity {
                     Log.d("myTag", "integer value of count "+ integer);
                     isFavourite = integer != 0;
                 }
-                favButton.setImageResource(isFavourite?R.drawable.fav_pressed:R.drawable.fav_not_pressed);
+                favButton.setBackgroundResource(isFavourite?R.drawable.fav_pressed:R.drawable.fav_not_pressed);
             }
         });
     }

@@ -116,7 +116,6 @@ public class MovieNetworkSource {
             public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
                 if (response.isSuccessful()) {
                     mReviewList.postValue(response.body().getResults());
-                    Log.d("myTag", response.body().getResults().get(0).getAuthor());
                 }
 
             }

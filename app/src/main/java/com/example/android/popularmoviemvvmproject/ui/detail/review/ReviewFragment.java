@@ -33,7 +33,9 @@ public class ReviewFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             movieId = bundle.getInt("movieId");
-            Log.d("myTag", ""+movieId);
+            Log.d("myTag", "bundle valve "+movieId);
+        } else {
+            Log.d("myTag", "bundle isn ull");
         }
         return inflater.inflate(R.layout.tab_sheet_review, container, false);
     }

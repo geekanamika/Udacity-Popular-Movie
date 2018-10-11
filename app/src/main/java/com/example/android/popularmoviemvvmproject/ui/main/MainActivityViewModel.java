@@ -40,4 +40,9 @@ public class MainActivityViewModel extends AndroidViewModel {
     public LiveData<Boolean> getLoadingStatus () {
         return repository.isLoadingData();
     }
+
+    public LiveData<List<Movie>> getFavouritesMovie() {
+        return repository.getFavouriteMovieData();
+
+    }
 }

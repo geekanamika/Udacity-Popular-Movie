@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 adapter.setList(movies);
-                Log.d("myTag", "mainactivity:onchanged called");
             }
         });
         viewModel.getLoadingStatus().observeForever(new Observer<Boolean>() {
@@ -59,10 +58,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     // if true then show progress bar else hide it
                     if (isLoading) {
                         progressBar.setVisibility(View.VISIBLE);
-                        Log.d("myTag", "mainactivity:show progress bar");
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        Log.d("myTag", "mainactivity:hide progress bar");
                     }
                 }
             }
@@ -116,11 +113,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> adapterView, final View view, int i, long l) {
         if (i == 0)
             viewModel.startFetchingData("popular");
         else if (i == 1)
             viewModel.startFetchingData("top_rated");
+        else if(i == 2) {
+            Observer<List<Movie>> observer = new Observer<List<Movie>>() {
+                @Override
+                public void onChanged(@Nullable List<Movie> movies) {
+                    adapter.setList(movies);
+                    viewModel.getFavouritesMovie().removeObserver(this);
+                }
+            };
+            viewModel.getFavouritesMovie().observe(this, observer);
+        }
         else {
             Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }

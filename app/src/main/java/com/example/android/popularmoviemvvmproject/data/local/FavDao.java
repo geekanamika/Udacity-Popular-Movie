@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.example.android.popularmoviemvvmproject.data.models.Favourites;
+import com.example.android.popularmoviemvvmproject.data.models.Movie;
 
 import java.util.List;
 
@@ -16,16 +16,19 @@ import java.util.List;
 @Dao
 public interface FavDao {
 
-    @Query("SELECT * FROM FAVOURITES")
-    LiveData<List<Favourites>> getFavouritesMovieList();
+    @Query("SELECT * FROM movieFavourites")
+    LiveData<List<Movie>> getFavouritesMovieList();
 
-    @Query("SELECT COUNT(id) FROM favourites WHERE id = :movieId")
+    @Query("SELECT COUNT(*) FROM movieFavourites")
+    LiveData<Integer> getFavouritesMovieListSize();
+
+    @Query("SELECT COUNT(id) FROM movieFavourites WHERE id = :movieId")
     LiveData<Integer> isFavourite(int movieId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertFavouriteMovie(Favourites favouriteMovie);
+    void insertFavouriteMovie(Movie favouriteMovie);
 
-    @Query("DELETE FROM favourites WHERE id = :movieId")
+    @Query("DELETE FROM movieFavourites WHERE id = :movieId")
     void deleteFavouriteMovie(int movieId);
 
 }
