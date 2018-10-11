@@ -29,12 +29,6 @@ public class Movie implements Parcelable {
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
-    @SerializedName("original_language")
-    @Expose
-    private String originalLanguage;
-    @SerializedName("original_title")
-    @Expose
-    private String originalTitle;
     @SerializedName("genre_ids")
     @Expose
     private List<Integer> genreIds = null;
@@ -55,8 +49,6 @@ public class Movie implements Parcelable {
         this.title = in.readString();
         this.popularity = in.readDouble();
         this.posterPath = in.readString();
-        this.originalLanguage = in.readString();
-        this.originalTitle = in.readString();
         this.genreIds = in.readArrayList(Integer.class.getClassLoader());
         this.backdropPath = in.readString();
         this.overview = in.readString();
@@ -111,22 +103,6 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
     }
 
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
     public List<Integer> getGenreIds() {
         return genreIds;
     }
@@ -172,8 +148,6 @@ public class Movie implements Parcelable {
         parcel.writeString(title);
         parcel.writeDouble(popularity);
         parcel.writeString(posterPath);
-        parcel.writeString(originalLanguage);
-        parcel.writeString(originalTitle);
         parcel.writeList(genreIds);
         parcel.writeString(backdropPath);
         parcel.writeString(overview);
