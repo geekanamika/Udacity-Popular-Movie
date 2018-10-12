@@ -1,18 +1,13 @@
 package com.example.android.popularmoviemvvmproject.data;
 
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.data.local.DbHelper;
-import com.example.android.popularmoviemvvmproject.data.local.FavDao;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
 import com.example.android.popularmoviemvvmproject.data.models.Trailer;
-import com.example.android.popularmoviemvvmproject.data.prefs.AppPreferenceHelper;
 import com.example.android.popularmoviemvvmproject.data.prefs.PrefHelper;
 import com.example.android.popularmoviemvvmproject.data.remote.MovieNetworkSource;
-import com.example.android.popularmoviemvvmproject.utils.AppExecutors;
-import com.example.android.popularmoviemvvmproject.utils.Constant;
 
 import java.util.List;
 
@@ -47,8 +42,7 @@ public class MovieRepository implements PrefHelper {
         return sInstance;
     }
 
-    /**
-     *
+    /*
      * local db related queries
      */
 
@@ -62,9 +56,9 @@ public class MovieRepository implements PrefHelper {
     }
 
     /**
-     * remove movie from fav table if unstarred
+     * remove movie from fav table if un-starred
      *
-     * @param id
+     * @param id : movie id which should be removed
      */
     public void removeFromFavourite(int id) {
         dbHelper.removeFromFavourite(id);
@@ -73,7 +67,7 @@ public class MovieRepository implements PrefHelper {
     /**
      * checks if movie is already fav or not, uses callback
      *
-     * @param id
+     * @param id : movie id which needs to be checked if it's favourite or not
      */
     public LiveData<Integer> checkIfMovieIsFavourite(int id) {
         return dbHelper.checkIfMovieIsFavourite(id);
@@ -99,7 +93,7 @@ public class MovieRepository implements PrefHelper {
     }
 
     public LiveData<List<Trailer>> getTrailerOfMovie() {
-        return movieNetworkSource.getmTrailerList();
+        return movieNetworkSource.getTrailerList();
     }
 
     public void startFetchingData(String filterType) {

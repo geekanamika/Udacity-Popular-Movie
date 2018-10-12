@@ -2,14 +2,12 @@ package com.example.android.popularmoviemvvmproject.data.remote;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
 import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.BuildConfig;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
 import com.example.android.popularmoviemvvmproject.data.models.Trailer;
-import com.example.android.popularmoviemvvmproject.utils.AppExecutors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -78,7 +76,7 @@ public class MovieNetworkSource {
         return isLoading;
     }
 
-    public MutableLiveData<List<Trailer>> getmTrailerList() {
+    public MutableLiveData<List<Trailer>> getTrailerList() {
         return mTrailerList;
     }
 

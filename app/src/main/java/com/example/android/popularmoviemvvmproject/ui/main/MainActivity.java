@@ -1,5 +1,6 @@
 package com.example.android.popularmoviemvvmproject.ui.main;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBottomSheet() {
         mBottomSheetDialog = new BottomSheetDialog(this);
-        View sheetView = getLayoutInflater().inflate(R.layout.btm_sheet_filter, null);
+        @SuppressLint("InflateParams") View sheetView = getLayoutInflater().inflate(R.layout.btm_sheet_filter, null);
         mBottomSheetDialog.setContentView(sheetView);
 
         // add listeners

@@ -1,18 +1,11 @@
 package com.example.android.popularmoviemvvmproject.ui.main;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.data.MovieRepository;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
-import com.example.android.popularmoviemvvmproject.data.remote.MovieResponse;
 import com.example.android.popularmoviemvvmproject.utils.Constant;
 import com.example.android.popularmoviemvvmproject.utils.InjectorUtil;
 

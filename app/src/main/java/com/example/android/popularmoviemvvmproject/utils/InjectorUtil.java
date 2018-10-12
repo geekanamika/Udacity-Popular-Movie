@@ -5,7 +5,6 @@ import android.content.Context;
 import com.example.android.popularmoviemvvmproject.data.MovieRepository;
 import com.example.android.popularmoviemvvmproject.data.local.AppDatabase;
 import com.example.android.popularmoviemvvmproject.data.local.AppDbHelper;
-import com.example.android.popularmoviemvvmproject.data.local.DbHelper;
 import com.example.android.popularmoviemvvmproject.data.prefs.AppPreferenceHelper;
 import com.example.android.popularmoviemvvmproject.data.remote.MovieNetworkSource;
 

@@ -6,6 +6,6 @@
         android:id="@+id/action_sort"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        android:icon="@drawable/action_drop_down"
+        android:icon="@drawable/action_filter"
         app:showAsAction="always" />
 </menu>

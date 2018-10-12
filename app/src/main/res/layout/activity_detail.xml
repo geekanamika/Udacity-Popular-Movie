@@ -50,6 +50,7 @@
                 <ImageView
                     android:id="@+id/img_movie_poster"
                     android:layout_width="158dp"
+                    android:contentDescription="@string/desc_movie_poster"
                     android:layout_height="230dp"
                     android:layout_marginTop="20dp"
                     app:layout_constraintDimensionRatio="h,1:3"
@@ -106,7 +107,6 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
-                    android:text="The Meg"
                     android:textColor="#FFF"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -165,7 +165,6 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="Overview"
                     android:textColor="#FFF"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rating" />
@@ -186,6 +185,7 @@
 
                 <ImageButton
                     android:id="@+id/fav_button"
+                    android:contentDescription="@string/favourite"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginEnd="16dp"

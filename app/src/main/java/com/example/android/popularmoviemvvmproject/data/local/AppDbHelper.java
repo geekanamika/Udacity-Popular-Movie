@@ -1,7 +1,6 @@
 package com.example.android.popularmoviemvvmproject.data.local;
 
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.utils.AppExecutors;

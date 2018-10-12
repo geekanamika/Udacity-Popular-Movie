@@ -6,7 +6,6 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.example.android.popularmoviemvvmproject.data.MovieRepository;
-import com.example.android.popularmoviemvvmproject.data.models.Review;
 import com.example.android.popularmoviemvvmproject.data.models.Trailer;
 import com.example.android.popularmoviemvvmproject.utils.InjectorUtil;
 

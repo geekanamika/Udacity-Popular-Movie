@@ -6,7 +6,7 @@ import java.util.HashMap;
  * Created by Anamika Tripathi on 5/10/18.
  */
 public class Constant {
-    private HashMap<Integer, String> genreList = new HashMap<>();
+    final private HashMap<Integer, String> genreList = new HashMap<>();
     public static final String POPULAR_SORT = "popular";
     public static final String TOP_RATED_SORT = "top_rated";
     public static final String FAVOURITE_SORT = "favourites";
