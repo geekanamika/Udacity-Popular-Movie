@@ -3,9 +3,11 @@ package com.example.android.popularmoviemvvmproject.ui.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,11 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.android.popularmoviemvvmproject.R;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
@@ -26,11 +25,12 @@ import com.example.android.popularmoviemvvmproject.utils.Constant;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private MainActivityViewModel viewModel;
     private GridMovieAdapter adapter;
     private ProgressBar progressBar;
+    private BottomSheetDialog mBottomSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,56 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // initializing variables
         initGridView();
 
+        //init bottom sheet for filter
+        initBottomSheet();
+
         // starting fetching data with popular filter
         viewModelSetUp();
+    }
+
+    private void initBottomSheet() {
+        mBottomSheetDialog = new BottomSheetDialog(this);
+        View sheetView = getLayoutInflater().inflate(R.layout.btm_sheet_filter, null);
+        mBottomSheetDialog.setContentView(sheetView);
+
+        // add listeners
+        TextView popularSort =  sheetView.findViewById(R.id.sort_popular);
+        TextView topRatedSort =  sheetView.findViewById(R.id.sort_top_rated);
+        TextView favouriteSort =  sheetView.findViewById(R.id.sort_favourite);
+        popularSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.setCurrentSortCriteria(Constant.POPULAR_SORT);
+                viewModel.startFetchingData();
+                mBottomSheetDialog.dismiss();
+                Log.d("myTag", "popular sort selected");
+            }
+        });
+        topRatedSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.setCurrentSortCriteria(Constant.TOP_RATED_SORT);
+                viewModel.startFetchingData();
+                mBottomSheetDialog.dismiss();
+                Log.d("myTag", "top sort selected");
+            }
+        });
+        favouriteSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBottomSheetDialog.dismiss();
+                viewModel.setCurrentSortCriteria(Constant.FAVOURITE_SORT);
+                viewModel.getFavouritesMovie().observe(MainActivity.this, new Observer<List<Movie>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Movie> movies) {
+                        if(viewModel.getCurrentSortCriteria().equals(Constant.FAVOURITE_SORT)) {
+                            adapter.setList(movies);
+                            Log.d("myTag", "favourite sort selected");
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void viewModelSetUp() {
@@ -89,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
         movieGridView.setAdapter(adapter);
-        GridLayoutManager manager = new GridLayoutManager(this, 3,
+        int recyclerViewSpanCount = getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_PORTRAIT ? 3 : 4;
+        GridLayoutManager manager = new GridLayoutManager(this, recyclerViewSpanCount,
                 GridLayoutManager.VERTICAL, false);
         movieGridView.setLayoutManager(manager);
         movieGridView.addItemDecoration(new SpacesItemDecoration(4));
@@ -112,49 +162,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        MenuItem item = menu.findItem(R.id.action_sort);
-        Spinner spinner = (Spinner) item.getActionView();
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(MainActivity.this);
         return true;
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, final View view, int i, long l) {
-        switch (i) {
-            case 0:
-                viewModel.setCurrentSortCriteria(Constant.POPULAR_SORT);
-                viewModel.startFetchingData();
-                break;
-            case 1:
-                viewModel.setCurrentSortCriteria(Constant.TOP_RATED_SORT);
-                viewModel.startFetchingData();
-                break;
-            case 2:
-                viewModel.setCurrentSortCriteria(Constant.FAVOURITE_SORT);
-                viewModel.getFavouritesMovie().observe(this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Movie> movies) {
-                        if(viewModel.getCurrentSortCriteria().equals(Constant.FAVOURITE_SORT)) {
-                            adapter.setList(movies);
-                        }
-                    }
-                });
-                break;
-            default:
-                Log.e("myTag", "unknown item selected");
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_sort){
+            mBottomSheetDialog.show();
+            return true;
         }
-        Log.d("myTag", "item selected " + i);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -13,6 +13,8 @@ public class Constant {
     public static final String basePosterPathURL = "http://image.tmdb.org/t/p/w185/";
     public static final String YOUTUBE_BASE_URL_TRAILER = "https://www.youtube.com/watch?v=";
     public static final String YOUTUBE_BASE_URL_IMAGE = "http://img.youtube.com/vi/";
+    public static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
+    public static final String BUNDLE_MOVIE_ID = "movieId";
 
     public void createGenreList() {
         genreList.put(28, "Action");

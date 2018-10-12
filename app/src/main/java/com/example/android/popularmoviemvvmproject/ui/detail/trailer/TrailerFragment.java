@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.android.popularmoviemvvmproject.R;
 import com.example.android.popularmoviemvvmproject.data.models.Trailer;
+import com.example.android.popularmoviemvvmproject.utils.Constant;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ import butterknife.ButterKnife;
  * Created by Anamika Tripathi on 10/10/18.
  */
 public class TrailerFragment extends Fragment {
-    private TrailerViewModel trailerViewModel;
     private TrailerAdapter trailerAdapter;
     private int movieId;
     @Nullable
@@ -34,7 +34,7 @@ public class TrailerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            movieId = bundle.getInt("movieId");
+            movieId = bundle.getInt(Constant.BUNDLE_MOVIE_ID);
         }
         return inflater.inflate(R.layout.tab_sheet_trailer, container, false);
     }
@@ -42,7 +42,6 @@ public class TrailerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("myTag", "inside trailerFragment");
 
         init(view);
 
@@ -51,13 +50,12 @@ public class TrailerFragment extends Fragment {
     }
 
     private void setUpTrailerData() {
-        trailerViewModel = ViewModelProviders.of(this).get(TrailerViewModel.class);
+        TrailerViewModel trailerViewModel = ViewModelProviders.of(this).get(TrailerViewModel.class);
         trailerViewModel.startFetchingData(movieId);
         trailerViewModel.getTrailerResults().observeForever(new Observer<List<Trailer>>() {
             @Override
             public void onChanged(@Nullable List<Trailer> trailers) {
                 trailerAdapter.setList(trailers);
-                Log.d("myTag", "trailerFragment:onChanged called");
             }
         });
     }
@@ -67,10 +65,9 @@ public class TrailerFragment extends Fragment {
         trailerAdapter = new TrailerAdapter(getContext(), new TrailerAdapter.TrailerClickListener() {
             @Override
             public void onTrailerClick(String url) {
-                Log.d("myTag", "youtuvbe url "+ url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setPackage("com.google.android.youtube");
+                intent.setPackage(Constant.YOUTUBE_PACKAGE);
                 startActivity(intent);
             }
         });

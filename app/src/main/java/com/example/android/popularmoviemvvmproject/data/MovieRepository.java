@@ -38,25 +38,14 @@ public class MovieRepository implements PrefHelper {
     public synchronized static MovieRepository getInstance(
             MovieNetworkSource weatherNetworkDataSource,
             PrefHelper preferenceHelper, DbHelper dbHelper) {
-        Log.d("myTag", "Getting the repository");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new MovieRepository(weatherNetworkDataSource,
                         preferenceHelper, dbHelper);
-                Log.d("myTag", "Made new repository");
             }
         }
         return sInstance;
     }
-
-//    public LiveData<List<Movie>> getMovieData(String filter) {
-//        if (filter.equals(Constant.FAVOURITE_SORT))
-//            return getFavouriteMovieData();
-//        else {
-//            startFetchingData(filter);
-//            return getDownloadedMovieData();
-//        }
-//    }
 
     /**
      *

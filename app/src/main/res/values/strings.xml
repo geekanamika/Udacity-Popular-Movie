@@ -22,6 +22,11 @@
     <string name="share">share</string>
     <string name="sample_text">lorem ipsum</string>
     <string name="sorting">sorting</string>
+    <string name="label_popular">Popular</string>
+    <string name="label_top_rated">Top-Rated</string>
+    <string name="label_favourite">Favourite</string>
+    <string name="label_trailer">Trailers</string>
+    <string name="label_review">Reviews</string>
 
     <string-array name="spinner_list">
         <item>Popular</item>

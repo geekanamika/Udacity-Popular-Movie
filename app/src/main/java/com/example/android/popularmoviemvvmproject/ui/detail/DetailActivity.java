@@ -92,7 +92,7 @@ public class DetailActivity extends AppCompatActivity {
         // init constants for genres
         constant = new Constant();
         constant.createGenreList();
-        // tablayout, viewpager init
+        // tab_layout, viewpager init
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
     }
@@ -101,13 +101,12 @@ public class DetailActivity extends AppCompatActivity {
 
         DetailModelFactory factory = new DetailModelFactory(this.getApplication(), movieModel.getId());
         detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
-        String baseURL = "http://image.tmdb.org/t/p/w185/";
         Picasso.with(this)
-                .load(baseURL + movieModel.getBackdropPath())
+                .load(Constant.basePosterPathURL + movieModel.getBackdropPath())
                 .placeholder(R.drawable.placeholder)
                 .into(backDropImage);
         Picasso.with(this)
-                .load(baseURL + movieModel.getPosterPath())
+                .load(Constant.basePosterPathURL + movieModel.getPosterPath())
                 .placeholder(R.drawable.placeholder)
                 .into(moviePoster);
         movieTitle.setText(movieModel.getTitle());
@@ -141,14 +140,14 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Bundle bundle = new Bundle();
-        bundle.putInt("movieId", movieModel.getId());
+        bundle.putInt(Constant.BUNDLE_MOVIE_ID, movieModel.getId());
         TrailerFragment trailerFragment = new TrailerFragment();
         ReviewFragment reviewFragment = new ReviewFragment();
         trailerFragment.setArguments(bundle);
         reviewFragment.setArguments(bundle);
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(trailerFragment, "Trailers");
-        adapter.addFragment(reviewFragment, "Reviews");
+        adapter.addFragment(trailerFragment, getString(R.string.label_trailer));
+        adapter.addFragment(reviewFragment, getString(R.string.label_review));
         viewPager.setAdapter(adapter);
     }
 

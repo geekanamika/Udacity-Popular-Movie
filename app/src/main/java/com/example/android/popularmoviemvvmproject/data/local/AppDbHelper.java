@@ -32,7 +32,6 @@ public class AppDbHelper implements DbHelper {
             synchronized (LOCK) {
                 sInstance = new AppDbHelper(favDao,
                         executors);
-                Log.d("myTag", "Made new db instance");
             }
         }
         return sInstance;

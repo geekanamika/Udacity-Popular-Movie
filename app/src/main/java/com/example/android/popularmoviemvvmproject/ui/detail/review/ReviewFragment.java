@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.android.popularmoviemvvmproject.R;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
+import com.example.android.popularmoviemvvmproject.utils.Constant;
 
 import java.util.List;
 
@@ -32,10 +33,9 @@ public class ReviewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            movieId = bundle.getInt("movieId");
-            Log.d("myTag", "bundle valve "+movieId);
+            movieId = bundle.getInt(Constant.BUNDLE_MOVIE_ID);
         } else {
-            Log.d("myTag", "bundle isn ull");
+            Log.d("myTag", "bundle is null");
         }
         return inflater.inflate(R.layout.tab_sheet_review, container, false);
     }
@@ -43,7 +43,6 @@ public class ReviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("reviewFragment", "inside reviewsFragment");
 
         init(view);
 
@@ -57,7 +56,6 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Review> reviews) {
                 reviewAdapter.setList(reviews);
-                Log.d("reviewFragment", "reviewFragment:onChanged called");
             }
         });
     }
