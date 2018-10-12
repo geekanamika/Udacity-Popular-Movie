@@ -80,30 +80,41 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mBottomSheetDialog.dismiss();
+
+                Log.d("myTag", "fav sort selected");
                 viewModel.setCurrentSortCriteria(Constant.FAVOURITE_SORT);
+                //viewModel.getFavouritesMovie();
                 viewModel.getFavouritesMovie().observe(MainActivity.this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(@Nullable List<Movie> movies) {
                         if(viewModel.getCurrentSortCriteria().equals(Constant.FAVOURITE_SORT)) {
                             adapter.setList(movies);
-                            Log.d("myTag", "favourite sort selected");
                         }
+                        viewModel.getFavouritesMovie().removeObserver(this);
                     }
                 });
             }
         });
     }
 
+    private boolean isNotFavouriteSort(){
+        return viewModel.getCurrentSortCriteria().equals(Constant.POPULAR_SORT) ||
+                viewModel.getCurrentSortCriteria().equals(Constant.TOP_RATED_SORT);
+    }
     private void viewModelSetUp() {
         MainViewModelFactory factory = new MainViewModelFactory(this.getApplication());
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
+        if(viewModel.getCurrentSortCriteria().equals(Constant.FAVOURITE_SORT))
+            progressBar.setVisibility(View.GONE);
 
-        viewModel.getMovieResults().observeForever(new Observer<List<Movie>>() {
+        viewModel.getMovieResults().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 if (movies != null) {
-                    if (movies.size() > 0)
+                    if(isNotFavouriteSort()) {
                         adapter.setList(movies);
+                    }
+
                 }
             }
         });
@@ -112,11 +123,19 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable Boolean isLoading) {
                 if (isLoading != null) {
                     // if true then show progress bar else hide it
-                    if (isLoading) {
+                    if (isLoading && isNotFavouriteSort()) {
                         progressBar.setVisibility(View.VISIBLE);
                     } else {
                         progressBar.setVisibility(View.GONE);
                     }
+                }
+            }
+        });
+        viewModel.getFavouritesMovie().observe(MainActivity.this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                if(viewModel.getCurrentSortCriteria().equals(Constant.FAVOURITE_SORT)) {
+                    adapter.setList(movies);
                 }
             }
         });
@@ -138,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         });
         movieGridView.setAdapter(adapter);
         int recyclerViewSpanCount = getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_PORTRAIT ? 3 : 4;
+                Configuration.ORIENTATION_PORTRAIT ? 3 : 5;
         GridLayoutManager manager = new GridLayoutManager(this, recyclerViewSpanCount,
                 GridLayoutManager.VERTICAL, false);
         movieGridView.setLayoutManager(manager);
