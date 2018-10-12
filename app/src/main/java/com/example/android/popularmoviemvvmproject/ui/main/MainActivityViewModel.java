@@ -16,11 +16,14 @@ import java.util.List;
  */
 public class MainActivityViewModel extends ViewModel {
     private MovieRepository repository;
-    private LiveData<List<Movie>> movieLiveData;
+    private LiveData<List<Movie>> movieNetworkLiveData;
+    private LiveData<List<Movie>> favouriteMovieData;
 
     MainActivityViewModel(Application application) {
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
-        movieLiveData = repository.getDownloadedMovieData();
+        movieNetworkLiveData = repository.getDownloadedMovieData();
+        favouriteMovieData = repository.getFavouriteMovieData();
+
         if(repository.getCurrentSortCriteria().equals(Constant.POPULAR_SORT) ||
                 repository.getCurrentSortCriteria().equals(Constant.TOP_RATED_SORT))
             startFetchingData();
@@ -31,7 +34,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public LiveData<List<Movie>> getMovieResults() {
-        return movieLiveData;
+        return movieNetworkLiveData;
     }
 
     public LiveData<Boolean> getLoadingStatus () {
@@ -47,8 +50,8 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public LiveData<List<Movie>> getFavouritesMovie() {
-        return repository.getFavouriteMovieData();
-
+        favouriteMovieData = repository.getFavouriteMovieData();
+        return favouriteMovieData;
     }
 
 
