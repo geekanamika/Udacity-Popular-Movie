@@ -11,7 +11,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRatingBar;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -111,7 +110,6 @@ public class DetailActivity extends AppCompatActivity {
                 .load(baseURL + movieModel.getPosterPath())
                 .placeholder(R.drawable.placeholder)
                 .into(moviePoster);
-        Log.d("myTag", movieModel.getReleaseDate());
         movieTitle.setText(movieModel.getTitle());
         genres.setText(getString(R.string.genre_label, getGenreString(movieModel)));
         releaseDate.setText(getString(R.string.release_date_label, movieModel.getReleaseDate()));
@@ -164,10 +162,8 @@ public class DetailActivity extends AppCompatActivity {
     void favouriteIconClick() {
         if (!isFavourite) {
             detailViewModel.setFavouriteMovie(movieModel);
-            Log.d("myTag", "set movie as Favourite "+ movieModel.getId());
         } else {
             detailViewModel.removeFavouriteMovie(movieModel.getId());
-            Log.d("myTag", "remove movie from Favourite "+ movieModel.getId());
         }
 
     }
@@ -177,7 +173,6 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable Integer integer) {
                 if (integer != null) {
-                    Log.d("myTag", "integer value of count "+ integer);
                     isFavourite = integer != 0;
                 }
                 favButton.setBackgroundResource(isFavourite?R.drawable.fav_pressed:R.drawable.fav_not_pressed);

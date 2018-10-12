@@ -4,11 +4,13 @@ package com.example.android.popularmoviemvvmproject.data.models;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
 
+import com.example.android.popularmoviemvvmproject.data.local.ArrayListConverter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -36,8 +38,8 @@ public class Movie implements Parcelable {
     private String posterPath;
     @SerializedName("genre_ids")
     @Expose
-    @Ignore
-    private List<Integer> genreIds = null;
+    @TypeConverters(ArrayListConverter.class)
+    private List<Integer> genreIds;
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;

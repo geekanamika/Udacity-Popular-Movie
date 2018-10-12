@@ -3,65 +3,73 @@ package com.example.android.popularmoviemvvmproject.data;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
+import com.example.android.popularmoviemvvmproject.data.local.DbHelper;
 import com.example.android.popularmoviemvvmproject.data.local.FavDao;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.data.models.Review;
 import com.example.android.popularmoviemvvmproject.data.models.Trailer;
+import com.example.android.popularmoviemvvmproject.data.prefs.AppPreferenceHelper;
+import com.example.android.popularmoviemvvmproject.data.prefs.PrefHelper;
 import com.example.android.popularmoviemvvmproject.data.remote.MovieNetworkSource;
 import com.example.android.popularmoviemvvmproject.utils.AppExecutors;
+import com.example.android.popularmoviemvvmproject.utils.Constant;
 
 import java.util.List;
 
 /**
  * Created by Anamika Tripathi on 2/10/18.
  */
-public class MovieRepository {
-
-    private static final String LOG_TAG = MovieRepository.class.getSimpleName();
+public class MovieRepository implements PrefHelper {
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
     private static MovieRepository sInstance;
-    private final FavDao favDao;
     private final MovieNetworkSource movieNetworkSource;
-    private final AppExecutors mExecutors;
+    private final PrefHelper preferenceHelper;
+    private final DbHelper dbHelper;
 
-    private MovieRepository(FavDao dao,
-                            MovieNetworkSource networkSource,
-                            AppExecutors executors) {
-        favDao = dao;
+    private MovieRepository(MovieNetworkSource networkSource,
+                            PrefHelper preferenceHelper, DbHelper dbHelper) {
+        this.dbHelper = dbHelper;
         movieNetworkSource = networkSource;
-        mExecutors = executors;
+        this.preferenceHelper = preferenceHelper;
     }
 
     public synchronized static MovieRepository getInstance(
-            FavDao favDao, MovieNetworkSource weatherNetworkDataSource,
-            AppExecutors executors) {
+            MovieNetworkSource weatherNetworkDataSource,
+            PrefHelper preferenceHelper, DbHelper dbHelper) {
         Log.d("myTag", "Getting the repository");
         if (sInstance == null) {
             synchronized (LOCK) {
-                sInstance = new MovieRepository(favDao, weatherNetworkDataSource,
-                        executors);
+                sInstance = new MovieRepository(weatherNetworkDataSource,
+                        preferenceHelper, dbHelper);
                 Log.d("myTag", "Made new repository");
             }
         }
         return sInstance;
     }
 
+//    public LiveData<List<Movie>> getMovieData(String filter) {
+//        if (filter.equals(Constant.FAVOURITE_SORT))
+//            return getFavouriteMovieData();
+//        else {
+//            startFetchingData(filter);
+//            return getDownloadedMovieData();
+//        }
+//    }
+
+    /**
+     *
+     * local db related queries
+     */
+
     /**
      * insert starred movie in db
      *
      * @param fav: fav movie object
      */
-    public void insertFavouriteMovie(final Movie fav) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                favDao.insertFavouriteMovie(fav);
-            }
-        };
-
-        mExecutors.diskIO().execute(runnable);
+    public void insertFavouriteMovie(Movie fav) {
+        dbHelper.insertFavouriteMovie(fav);
     }
 
     /**
@@ -69,14 +77,8 @@ public class MovieRepository {
      *
      * @param id
      */
-    public void removeFromFavourite(final int id) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                favDao.deleteFavouriteMovie(id);
-            }
-        };
-        mExecutors.diskIO().execute(runnable);
+    public void removeFromFavourite(int id) {
+        dbHelper.removeFromFavourite(id);
     }
 
     /**
@@ -84,16 +86,15 @@ public class MovieRepository {
      *
      * @param id
      */
-    public LiveData<Integer> checkIfMovieIsFavourite(final int id) {
-        return favDao.isFavourite(id);
+    public LiveData<Integer> checkIfMovieIsFavourite(int id) {
+        return dbHelper.checkIfMovieIsFavourite(id);
     }
 
     /**
      * @return list of all favourites movies saved and it's details
      */
     public LiveData<List<Movie>> getFavouriteMovieData() {
-        //Log.d("myTag", ""+ favDao.getFavouritesMovieListSize().getValue());
-        return favDao.getFavouritesMovieList();
+        return dbHelper.getFavouriteMovieData();
     }
 
     /*
@@ -128,4 +129,16 @@ public class MovieRepository {
         return movieNetworkSource.getIsLoading();
     }
 
+    /**
+     * Preference functions
+     */
+    @Override
+    public String getCurrentSortCriteria() {
+        return preferenceHelper.getCurrentSortCriteria();
+    }
+
+    @Override
+    public void setCurrentSortCriteria(String sort) {
+        preferenceHelper.setCurrentSortCriteria(sort);
+    }
 }

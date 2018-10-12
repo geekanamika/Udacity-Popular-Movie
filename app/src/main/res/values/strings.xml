@@ -21,10 +21,12 @@
     <string name="favourite">Favourite</string>
     <string name="share">share</string>
     <string name="sample_text">lorem ipsum</string>
+    <string name="sorting">sorting</string>
 
     <string-array name="spinner_list">
         <item>Popular</item>
         <item>Top-rated</item>
         <item>Favourites</item>
     </string-array>
+
 </resources>

@@ -57,11 +57,9 @@ public class MovieNetworkSource {
      * Get the singleton for this class
      */
     public static MovieNetworkSource getInstance() {
-        Log.d("myTag", "Getting the network data source");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new MovieNetworkSource();
-                Log.d("myTag", "Made new network data source");
             }
         }
         return sInstance;
@@ -94,7 +92,6 @@ public class MovieNetworkSource {
                     // posting value to the live data
                     mDownloadedMovieDetails.postValue(response.body().getMovies());
                     isLoading.postValue(false);
-                    Log.d("myTag","network source: on sucess called");
                 }
             }
 

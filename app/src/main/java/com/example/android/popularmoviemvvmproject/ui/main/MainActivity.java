@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 import com.example.android.popularmoviemvvmproject.R;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
 import com.example.android.popularmoviemvvmproject.ui.detail.DetailActivity;
+import com.example.android.popularmoviemvvmproject.utils.Constant;
 
 import java.util.List;
 
@@ -40,15 +40,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // toolbar setup and setting title
         setUpToolbar();
         // initializing variables
-        init();
+        initGridView();
 
         // starting fetching data with popular filter
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        viewModel.startFetchingData("popular");
+        viewModelSetUp();
+    }
+
+    private void viewModelSetUp() {
+        MainViewModelFactory factory = new MainViewModelFactory(this.getApplication());
+        viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
+
         viewModel.getMovieResults().observeForever(new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
-                adapter.setList(movies);
+                if (movies != null) {
+                    if (movies.size() > 0)
+                        adapter.setList(movies);
+                }
             }
         });
         viewModel.getLoadingStatus().observeForever(new Observer<Boolean>() {
@@ -72,12 +80,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setTitle("MovieTime");
     }
 
-    private void init() {
+    private void initGridView() {
         RecyclerView movieGridView = findViewById(R.id.movie_list);
         adapter = new GridMovieAdapter(this, new GridMovieAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(int position) {
-                startDetailActivity(position);
+            public void onItemClick(Movie movieDetail) {
+                startDetailActivity(movieDetail);
             }
         });
         movieGridView.setAdapter(adapter);
@@ -89,9 +97,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         progressBar = findViewById(R.id.progress_bar);
     }
 
-    private void startDetailActivity(int position) {
+    /**
+     * starts detail activity with passing movie model
+     *
+     * @param movieDetail : value to be passed to detail activity
+     */
+    private void startDetailActivity(Movie movieDetail) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(getString(R.string.extra_key), viewModel.getMovieResults().getValue().get(position));
+        intent.putExtra(getString(R.string.extra_key), movieDetail);
         startActivity(intent);
     }
 
@@ -114,23 +127,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, final View view, int i, long l) {
-        if (i == 0)
-            viewModel.startFetchingData("popular");
-        else if (i == 1)
-            viewModel.startFetchingData("top_rated");
-        else if(i == 2) {
-            Observer<List<Movie>> observer = new Observer<List<Movie>>() {
-                @Override
-                public void onChanged(@Nullable List<Movie> movies) {
-                    adapter.setList(movies);
-                    viewModel.getFavouritesMovie().removeObserver(this);
-                }
-            };
-            viewModel.getFavouritesMovie().observe(this, observer);
+        switch (i) {
+            case 0:
+                viewModel.setCurrentSortCriteria(Constant.POPULAR_SORT);
+                viewModel.startFetchingData();
+                break;
+            case 1:
+                viewModel.setCurrentSortCriteria(Constant.TOP_RATED_SORT);
+                viewModel.startFetchingData();
+                break;
+            case 2:
+                viewModel.setCurrentSortCriteria(Constant.FAVOURITE_SORT);
+                viewModel.getFavouritesMovie().observe(this, new Observer<List<Movie>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Movie> movies) {
+                        if(viewModel.getCurrentSortCriteria().equals(Constant.FAVOURITE_SORT)) {
+                            adapter.setList(movies);
+                        }
+                    }
+                });
+                break;
+            default:
+                Log.e("myTag", "unknown item selected");
         }
-        else {
-            Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-        }
+        Log.d("myTag", "item selected " + i);
     }
 
     @Override

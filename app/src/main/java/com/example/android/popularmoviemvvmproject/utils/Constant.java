@@ -7,6 +7,12 @@ import java.util.HashMap;
  */
 public class Constant {
     private HashMap<Integer, String> genreList = new HashMap<>();
+    public static final String POPULAR_SORT = "popular";
+    public static final String TOP_RATED_SORT = "top_rated";
+    public static final String FAVOURITE_SORT = "favourites";
+    public static final String basePosterPathURL = "http://image.tmdb.org/t/p/w185/";
+    public static final String YOUTUBE_BASE_URL_TRAILER = "https://www.youtube.com/watch?v=";
+    public static final String YOUTUBE_BASE_URL_IMAGE = "http://img.youtube.com/vi/";
 
     public void createGenreList() {
         genreList.put(28, "Action");

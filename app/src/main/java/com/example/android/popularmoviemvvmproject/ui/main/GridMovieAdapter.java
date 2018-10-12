@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.android.popularmoviemvvmproject.R;
 import com.example.android.popularmoviemvvmproject.data.models.Movie;
+import com.example.android.popularmoviemvvmproject.utils.Constant;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ public class GridMovieAdapter extends RecyclerView.Adapter<GridMovieAdapter.MyVi
     private final Context context;
     private final ItemClickListener listener;
     private List<Movie> movieList;
-    private String baseURL = "http://image.tmdb.org/t/p/w185/";
 
-    public GridMovieAdapter(Context context, ItemClickListener listener) {
+
+    GridMovieAdapter(Context context, ItemClickListener listener) {
         this.context = context;
         this.listener = listener;
         movieList = new ArrayList<>();
@@ -47,7 +48,7 @@ public class GridMovieAdapter extends RecyclerView.Adapter<GridMovieAdapter.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.movieTitle.setText(movieList.get(position).getTitle());
         Picasso.with(context)
-                .load(baseURL+ movieList.get(position).getPosterPath())
+                .load(Constant.basePosterPathURL+ movieList.get(position).getPosterPath())
                 .placeholder(R.drawable.placeholder)
                 .into(holder.moviePoster);
         holder.movieReleaseYear.setText(movieList.get(position).getReleaseDate());
@@ -76,11 +77,11 @@ public class GridMovieAdapter extends RecyclerView.Adapter<GridMovieAdapter.MyVi
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            listener.onItemClick(position);
+            listener.onItemClick(movieList.get(position));
         }
     }
 
     interface ItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(Movie movieDetail);
     }
 }

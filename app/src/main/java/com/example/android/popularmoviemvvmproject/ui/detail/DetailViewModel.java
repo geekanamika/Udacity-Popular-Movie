@@ -14,7 +14,7 @@ import com.example.android.popularmoviemvvmproject.utils.InjectorUtil;
 public class DetailViewModel extends ViewModel {
     private MovieRepository movieRepository;
     private LiveData<Integer> favouriteStatus;
-    DetailViewModel(Application application, int movieId) {
+    public DetailViewModel(Application application, int movieId) {
         movieRepository = InjectorUtil.provideRepository(application.getApplicationContext());
         favouriteStatus = movieRepository.checkIfMovieIsFavourite(movieId);
     }

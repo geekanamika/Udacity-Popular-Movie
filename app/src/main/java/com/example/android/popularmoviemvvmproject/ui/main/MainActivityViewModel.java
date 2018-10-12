@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -19,18 +20,18 @@ import java.util.List;
 /**
  * Created by Anamika Tripathi on 4/10/18.
  */
-public class MainActivityViewModel extends AndroidViewModel {
+public class MainActivityViewModel extends ViewModel {
     private MovieRepository repository;
     private LiveData<List<Movie>> movieLiveData;
 
-    public MainActivityViewModel(@NonNull Application application) {
-        super(application);
+    MainActivityViewModel(Application application) {
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
         movieLiveData = repository.getDownloadedMovieData();
+        startFetchingData();
     }
 
-    public void startFetchingData(String filterType) {
-        repository.startFetchingData(filterType);
+    public void startFetchingData() {
+        repository.startFetchingData(repository.getCurrentSortCriteria());
     }
 
     public LiveData<List<Movie>> getMovieResults() {
@@ -41,8 +42,18 @@ public class MainActivityViewModel extends AndroidViewModel {
         return repository.isLoadingData();
     }
 
+    public String getCurrentSortCriteria(){
+        return repository.getCurrentSortCriteria();
+    }
+
+    public void setCurrentSortCriteria(String criteria){
+        repository.setCurrentSortCriteria(criteria);
+    }
+
     public LiveData<List<Movie>> getFavouritesMovie() {
         return repository.getFavouriteMovieData();
 
     }
+
+
 }
